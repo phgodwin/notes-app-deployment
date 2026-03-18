@@ -31,8 +31,8 @@ function App() {
   return (
     <div className="app-container">
       <header>
-        <h1>Sticky Notes</h1>
-        <p>Create, edit, and delete notes (no database required).</p>
+        <h1>Fridge Notes</h1>
+        <p>Create, edit, and delete sticky note reminders!</p>
       </header>
 
       <section className="input-panel">
@@ -43,7 +43,7 @@ function App() {
           onChange={(e) => setDraft(e.target.value)}
         />
         <button onClick={createNote} disabled={!draft.trim()}>
-          Add Sticky Note
+          Create Note
         </button>
       </section>
 
