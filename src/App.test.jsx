@@ -16,7 +16,7 @@ describe('Sticky Notes App', () => {
   it('adds a new note', async () => {
     const user = userEvent.setup();
     const input = screen.getByLabelText(/New note content/i);
-    const addButton = screen.getByRole('button', { name: /Add Sticky Note/i });
+    const addButton = screen.getByRole('button', { name: /Create Note/i });
 
     await user.type(input, 'Test note');
     await user.click(addButton);
@@ -28,7 +28,7 @@ describe('Sticky Notes App', () => {
   it('updates an existing note', async () => {
     const user = userEvent.setup();
     const input = screen.getByLabelText(/New note content/i);
-    const addButton = screen.getByRole('button', { name: /Add Sticky Note/i });
+    const addButton = screen.getByRole('button', { name: /Create Note/i });
 
     await user.type(input, 'Update me');
     await user.click(addButton);
@@ -43,7 +43,7 @@ describe('Sticky Notes App', () => {
   it('deletes a note', async () => {
     const user = userEvent.setup();
     const input = screen.getByLabelText(/New note content/i);
-    const addButton = screen.getByRole('button', { name: /Add Sticky Note/i });
+    const addButton = screen.getByRole('button', { name: /Create Note/i });
 
     await user.type(input, 'Delete me');
     await user.click(addButton);
