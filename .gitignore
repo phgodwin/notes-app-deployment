@@ -1,1 +1,11 @@
 node_modules/
+dist/
+.vite/
+.scannerwork/
+coverage/
+*.lcov
+npm-debug.log*
+.env
+.env.*
+!.env.example
+.vscode/

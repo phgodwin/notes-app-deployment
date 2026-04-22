@@ -31,8 +31,8 @@ function App() {
   return (
     <div className="app-container">
       <header>
-        <h1>Fridge Notes</h1>
-        <p>Create, edit, and delete sticky note reminders!</p>
+        <h1>Fridge Notes!</h1>
+        <p>Create, edit, and delete sticky note reminders, for when you have a busy brain!</p>
       </header>
 
       <section className="input-panel">
@@ -49,7 +49,7 @@ function App() {
 
       <section className="notes-grid" aria-label="Sticky notes list">
         {notes.length === 0 ? (
-          <div className="empty-state">No notes yet. Add one above!</div>
+          <div className="empty-state">You have no notes yet... To get started create a new note above!</div>
         ) : (
           notes.map((note) => (
             <div key={note.id} className="sticky-note" style={{ backgroundColor: note.color }}>

@@ -18,16 +18,20 @@ body {
   max-width: 900px;
   margin: 1.5rem auto;
   padding: 1rem;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 header h1 {
   margin: 0;
   font-size: 2rem;
+  color: coral;
+  text-align: center;
 }
 
 header p {
   margin: 0.3rem 0 1rem;
   color: #5d5d5d;
+  text-align: center;
 }
 
 .input-panel {
