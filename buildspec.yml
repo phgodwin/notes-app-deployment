@@ -22,6 +22,7 @@ phases:
 
   post_build:
     commands:
+      - echo "...Running SonarQube analysis..."
       - cd $CODEBUILD_SRC_DIR
       - sonar-scanner -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.token=$SONAR_TOKEN -Dsonar.projectKey=$SONAR_PROJECT_KEY
 
