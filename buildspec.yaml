@@ -1,0 +1,34 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo "...Installing your dependencies..."
+      - npm install
+      - echo "...Installing SonarScanner..."
+      - npm install -g sonarqube-scanner
+
+  pre_build:
+    commands:
+      - echo "...Running tests and generating coverage report..."
+      - npm test -- --coverage
+
+  build:
+    commands:
+      - echo "...Building your react app..."
+      - npm run build
+
+  post_build:
+    commands:
+      - echo "Running SonarQube scan..."
+      - sonar-scanner \
+          -Dsonar.host.url=$SONAR_HOST_URL \
+          -Dsonar.login=$SONAR_TOKEN \
+          -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: dist
