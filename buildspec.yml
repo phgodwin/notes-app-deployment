@@ -19,8 +19,7 @@ phases:
     commands:
       - echo "...Building your react app..."
       - npm run build
-
-  phases:
+      
   post_build:
     commands:
       - cd $CODEBUILD_SRC_DIR
