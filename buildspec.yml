@@ -20,13 +20,11 @@ phases:
       - echo "...Building your react app..."
       - npm run build
 
+  phases:
   post_build:
     commands:
-      - echo "Running SonarQube scan..."
-      - sonar-scanner \
-          -Dsonar.host.url=$SONAR_HOST_URL \
-          -Dsonar.login=$SONAR_TOKEN \
-          -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+      - cd $CODEBUILD_SRC_DIR
+      - sonar-scanner -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN -Dsonar.projectKey=$SONAR_PROJECT_KEY
 
 artifacts:
   files:
