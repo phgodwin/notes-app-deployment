@@ -13,7 +13,7 @@ phases:
   pre_build:
     commands:
       - echo "...Running tests and generating coverage report..."
-      - npm test -- --coverage
+      - npm test
 
   build:
     commands:
