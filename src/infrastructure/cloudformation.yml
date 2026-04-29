@@ -1,0 +1,84 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: EC2 instance prepared for CodeDeploy deployment of React app.
+
+Parameters:
+  LatestAmiId:
+    Description: The latest Amazon Linux 2 AMI from the Parameter Store
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+
+  InstanceType:
+    Description: WebServer EC2 instance type
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t3.micro
+      - t2.micro
+
+  MyIP:
+    Description: Your IP address in CIDR format
+    Type: String
+    Default: 0.0.0.0/0
+
+Resources:
+
+  EC2InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforAWSCodeDeploy
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+
+  EC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref EC2InstanceRole
+
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: !Ref MyIP
+
+  WebServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: !Ref EC2InstanceProfile
+      SecurityGroupIds:
+        - !Ref WebServerSecurityGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update -y
+          yum install -y httpd ruby wget
+          systemctl start httpd
+          systemctl enable httpd
+
+          cd /home/ec2-user
+          wget https://aws-codedeploy-${AWS::Region}.s3.${AWS::Region}.amazonaws.com/latest/install
+          chmod +x ./install
+          ./install auto
+          systemctl enable codedeploy-agent
+          systemctl start codedeploy-agent
+
+          mkdir -p /var/www/html
+          chown -R ec2-user:ec2-user /var/www/html
+
+Outputs:
+  WebsiteURL:
+    Description: Website URL
+    Value: !Sub "http://${WebServer.PublicDnsName}"
