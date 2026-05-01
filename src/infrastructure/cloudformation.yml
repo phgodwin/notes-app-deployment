@@ -71,6 +71,16 @@ Resources:
           systemctl start httpd
           systemctl enable httpd
 
+          # Wait for Ruby to become available (retry up to 10 times)
+          for i in {1..10}; do
+            if command -v ruby >/dev/null 2>&1; then
+              echo "Ruby is ready"
+              break
+            fi
+            echo "Ruby not ready yet, retrying..."
+            sleep 3
+          done
+
           cd /home/ec2-user
           wget https://aws-codedeploy-${AWS::Region}.s3.${AWS::Region}.amazonaws.com/latest/install
           chmod +x ./install
