@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
@@ -18,8 +18,10 @@ describe('Sticky Notes App', () => {
     const input = screen.getByLabelText(/New note content/i);
     const addButton = screen.getByRole('button', { name: /Create Note/i });
 
-    await user.type(input, 'Test note');
-    await user.click(addButton);
+    await act(async () => {
+      await user.type(input, 'Test note');
+      await user.click(addButton);
+    });
 
     expect(screen.getByDisplayValue('Test note')).toBeInTheDocument();
     expect(screen.queryByText(/No notes yet/i)).toBeNull();
@@ -30,12 +32,16 @@ describe('Sticky Notes App', () => {
     const input = screen.getByLabelText(/New note content/i);
     const addButton = screen.getByRole('button', { name: /Create Note/i });
 
-    await user.type(input, 'Update me');
-    await user.click(addButton);
+    await act(async () => {
+      await user.type(input, 'Update me');
+      await user.click(addButton);
+    });
 
     const noteTextarea = screen.getByDisplayValue('Update me');
-    await user.clear(noteTextarea);
-    await user.type(noteTextarea, 'Updated content');
+    await act(async () => {
+      await user.clear(noteTextarea);
+      await user.type(noteTextarea, 'Updated content');
+    });
 
     expect(screen.getByDisplayValue('Updated content')).toBeInTheDocument();
   });
@@ -45,11 +51,15 @@ describe('Sticky Notes App', () => {
     const input = screen.getByLabelText(/New note content/i);
     const addButton = screen.getByRole('button', { name: /Create Note/i });
 
-    await user.type(input, 'Delete me');
-    await user.click(addButton);
+    await act(async () => {
+      await user.type(input, 'Delete me');
+      await user.click(addButton);
+    });
 
     const deleteButton = screen.getByRole('button', { name: /Delete/i });
-    await user.click(deleteButton);
+    await act(async () => {
+      await user.click(deleteButton);
+    });
 
     expect(screen.queryByDisplayValue('Delete me')).toBeNull();
     expect(screen.getByText(/No notes yet/i)).toBeInTheDocument();
